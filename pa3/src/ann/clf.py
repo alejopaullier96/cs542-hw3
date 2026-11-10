@@ -204,9 +204,18 @@ class ANNC(Model):
         Y_gt: np.ndarray = y_gt.reshape(-1,1) # make this a column vector
 
         # perform gradient descent until convergence
-
-        # TODO
-        ...
+        prev_obj = np.inf # very large objective as initial value
+        for _ in tqdm(range(max_iters)):
+            Y_hat = self._predict(X_network_samples) # predictions
+            obj = self.loss_function.forward(Y_hat, Y_gt) # get loss
+            for P in self.parameters():
+                obj += gamma * np.sum(P.val**2) # regularization term
+            if abs(prev_obj - obj) <= epsilon:# if converges break
+                break
+            optimizer.reset()# reset optimizer
+            self._backward(X_network_samples, Y_gt, gamma=gamma) # backward pass
+            optimizer.step() # optimizer step updates weights
+            prev_obj = obj # update objective
 
     def _predict(self: ANNC,
                  X_network_samples: np.ndarray) -> np.ndarray:
