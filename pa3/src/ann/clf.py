@@ -126,8 +126,17 @@ class ANNC(Model):
     """
     def _map_user_samples(self: ANNC,
                           X_user_samples: np.ndarray) -> np.ndarray:
-        # TODO
-        ...
+        X_network_samples = np.zeros((X_user_samples.shape[0], self.num_inputs), dtype=float)
+        col = 0
+        for feature_idx, feature_map in enumerate(self.input_to_feature_maps):
+            if feature_map is None: # the column is continuous
+                X_network_samples[:, col] = X_user_samples[:, feature_idx] # copy the continuous value
+                col += 1
+            else:# the column is discrete
+                for row_idx, raw_code in enumerate(X_user_samples[:, feature_idx]):
+                    X_network_samples[row_idx, col + feature_map[float(raw_code)]] = 1.0 # OHE
+                col += len(feature_map)
+        return X_network_samples
 
     """
         A method to calculate the gradients for 'W' and 'b' within a single layer. This method expects
