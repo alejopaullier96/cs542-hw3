@@ -11,13 +11,12 @@ class Tanh(Activation):
 
     def forward(self: Tanh,
                 X: np.ndarray) -> np.ndarray:
-        # TODO
-        ...
+        return np.tanh(X)
 
     # also element-wise indepenent
     def backward(self: Tanh,
                  X: np.ndarray,
                  dLoss_dOutput: np.ndarray) -> np.ndarray:
-        # TODO
-        ...
+        y = self.forward(X)
+        return dLoss_dOutput * (1.0 - y * y)
 

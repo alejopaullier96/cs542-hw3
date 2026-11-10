@@ -12,8 +12,7 @@ class Sigmoid(Activation):
     # the formula of sigmoid is 1/(1 + e^-x)
     def forward(self: Sigmoid,
                 X: np.ndarray) -> np.ndarray:
-        # TODO
-        ...
+        return 1/(1 + np.exp(-np.clip(X, -700, 700)))# numerical stability
 
 
     # SINCE sigmoid is element-wise INDEPENDENT, this makes derivatives nice.
@@ -33,6 +32,6 @@ class Sigmoid(Activation):
     def backward(self: Sigmoid,
                  X: np.ndarray,
                  dLoss_dOutput: np.ndarray) -> np.ndarray:
-        # TODO
-        ...
+        s = self.forward(X)
+        return dLoss_dOutput * s * (1.0 - s)
 
