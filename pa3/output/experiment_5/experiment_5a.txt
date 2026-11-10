@@ -1,0 +1,202 @@
+Experiment (a):
+
+Model: 1 hidden unit, Linear hidden activation (perceptron approximation)
+Output: Sigmoid + binary cross-entropy
+gamma: 0
+lr: 0.01
+epsilon: 1e-6
+max_iters: 1000000
+Folds: 5
+Seed: 12345
+Preprocessing: StandardScaler on continuous features only
+Init: np.random.seed(12345) before every model
+----------------------------------------------------------------------------------------------------
+Voting dataset
+Shape: (440, 11)
+Class counts: {0: 244, 1: 196}
+Continuous features: 0
+Discrete features: 11
+Network inputs: 33
+Fold: 1
+Train size: 352
+Test size: 88
+Train time (s): 1.64
+Train accuracy: 0.9772727272727273
+AROC: 0.9979166666666667
+Precision: 0.9743589743589743
+Recall: 0.95
+Accuracy: 0.9659090909090909
+Fold: 2
+Train size: 352
+Test size: 88
+Train time (s): 1.16
+Train accuracy: 0.9857954545454546
+AROC: 0.9994767137624281
+Precision: 1.0
+Recall: 0.9487179487179487
+Accuracy: 0.9772727272727273
+Fold: 3
+Train size: 352
+Test size: 88
+Train time (s): 1.20
+Train accuracy: 0.9772727272727273
+AROC: 0.9973835688121402
+Precision: 0.9743589743589743
+Recall: 0.9743589743589743
+Accuracy: 0.9772727272727273
+Fold: 4
+Train size: 352
+Test size: 88
+Train time (s): 1.14
+Train accuracy: 0.9829545454545454
+AROC: 1.0
+Precision: 1.0
+Recall: 1.0
+Accuracy: 1.0
+Fold: 5
+Train size: 352
+Test size: 88
+Train time (s): 1.00
+Train accuracy: 0.9857954545454546
+AROC: 0.9740973312401884
+Precision: 0.9473684210526315
+Recall: 0.9230769230769231
+Accuracy: 0.9431818181818182
+Mean aroc: 0.9937748560962847
+Variance aroc: 9.772919683914306e-05
+Mean precision: 0.9792172739541162
+Variance precision: 0.00038507979696984676
+Mean recall: 0.9592307692307692
+Variance recall: 0.0006787639710716627
+Mean accuracy: 0.9727272727272729
+Variance accuracy: 0.00034090909090909034
+----------------------------------------------------------------------------------------------------
+Spam dataset
+Shape: (74736, 19)
+Class counts: {0: 27997, 1: 46739}
+Continuous features: 18
+Discrete features: 1
+Network inputs: 24
+Fold: 1
+Train size: 59788
+Test size: 14948
+Train time (s): 3.52
+Train accuracy: 0.6161771592961799
+AROC: 0.5535778661593007
+Precision: 0.6247134819754115
+Recall: 0.9621309370988447
+Accuracy: 0.6148648648648649
+Fold: 2
+Train size: 59789
+Test size: 14947
+Train time (s): 3.33
+Train accuracy: 0.6163006573115456
+AROC: 0.5535311680374491
+Precision: 0.6246267101882075
+Recall: 0.9621309370988447
+Accuracy: 0.6147052920318459
+Fold: 3
+Train size: 59789
+Test size: 14947
+Train time (s): 3.68
+Train accuracy: 0.6157654418036763
+AROC: 0.5548438680634257
+Precision: 0.6257706962244545
+Recall: 0.9663029525032092
+Accuracy: 0.6175152204455744
+Fold: 4
+Train size: 59789
+Test size: 14947
+Train time (s): 3.45
+Train accuracy: 0.6167355199116894
+AROC: 0.5523434215551206
+Precision: 0.6255092880325944
+Recall: 0.9689773213521609
+Accuracy: 0.6177828326754533
+Fold: 5
+Train size: 59789
+Test size: 14947
+Train time (s): 3.63
+Train accuracy: 0.615614912442088
+AROC: 0.5475632937993855
+Precision: 0.6247747123249688
+Recall: 0.9642666096073607
+Accuracy: 0.6155081287214825
+Mean aroc: 0.5523719235229363
+Variance aroc: 6.406477495654043e-06
+Mean precision: 0.6250789777491274
+Variance precision: 2.188703889538544e-07
+Mean recall: 0.9647617515320839
+Variance recall: 6.846772806247902e-06
+Mean accuracy: 0.6160752677478442
+Variance accuracy: 1.730559406094661e-06
+----------------------------------------------------------------------------------------------------
+Volcanoes dataset
+Shape: (2231, 225)
+Class counts: {0: 1500, 1: 731}
+Continuous features: 225
+Discrete features: 0
+Network inputs: 225
+Fold: 1
+Train size: 1784
+Test size: 447
+Train time (s): 2.01
+Train accuracy: 0.718609865470852
+AROC: 0.7499999999999999
+Precision: 0.6018518518518519
+Recall: 0.4421768707482993
+Accuracy: 0.7203579418344519
+Fold: 2
+Train size: 1785
+Test size: 446
+Train time (s): 2.39
+Train accuracy: 0.7204481792717087
+AROC: 0.722351598173516
+Precision: 0.5701754385964912
+Recall: 0.4452054794520548
+Accuracy: 0.7085201793721974
+Fold: 3
+Train size: 1785
+Test size: 446
+Train time (s): 2.05
+Train accuracy: 0.7170868347338936
+AROC: 0.743835616438356
+Precision: 0.6153846153846154
+Recall: 0.4383561643835616
+Accuracy: 0.726457399103139
+Fold: 4
+Train size: 1785
+Test size: 446
+Train time (s): 2.11
+Train accuracy: 0.7165266106442577
+AROC: 0.7552739726027398
+Precision: 0.5795454545454546
+Recall: 0.3493150684931507
+Accuracy: 0.7040358744394619
+Fold: 5
+Train size: 1785
+Test size: 446
+Train time (s): 2.42
+Train accuracy: 0.7092436974789916
+AROC: 0.7621461187214612
+Precision: 0.6593406593406593
+Recall: 0.410958904109589
+Accuracy: 0.7376681614349776
+Mean aroc: 0.7467214611872145
+Variance aroc: 0.0001848065303058734
+Mean precision: 0.6052596039438145
+Variance precision: 0.0009862010642465435
+Mean recall: 0.4172024974373311
+Variance recall: 0.001300609883111591
+Mean accuracy: 0.7194079112368456
+Variance accuracy: 0.0001477753590136761
+----------------------------------------------------------------------------------------------------
+Summary (mean and variance across 5 folds):
+dataset          aroc mean      aroc var  precision mean   precision var   recall mean    recall var   accuracy mean    accuracy var
+voting            0.993775      0.000098        0.979217        0.000385      0.959231      0.000679        0.972727        0.000341
+spam              0.552372      0.000006        0.625079        0.000000      0.964762      0.000007        0.616075        0.000002
+volcanoes         0.746721      0.000185        0.605260        0.000986      0.417202      0.001301        0.719408        0.000148
+Error bars on experiment_5a.png are standard deviations
+Saved output/experiment_5/experiment_5a.png
+Saved output/experiment_5/experiment_5a_roc.png
+Saved output/experiment_5/experiment_5a.txt
