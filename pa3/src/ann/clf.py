@@ -150,8 +150,11 @@ class ANNC(Model):
                       W: Parameter,
                       b: Parameter,
                       activation: Activation) -> np.ndarray:
-        # TODO
-        ...
+        Z = np.dot(X, W.val) + b.val # linear transfromation
+        dLoss_dZ = activation.backward(Z, dLoss_dActivation_output)# gets it from activation backwards pass
+        W.grad += np.dot(X.T, dLoss_dZ) #  dL/dW = XT * dL/dZ, is gradient with respect to weights
+        b.grad += np.sum(dLoss_dZ, axis=0, keepdims=True) # is dL/db = dL/dZ, is gradient with respect to bias
+        return np.dot(dLoss_dZ, W.val.T) # dL/dX = dL/dZ * WT is gradient with respect to inputs
 
     def _backward(self: ANNC,
                   X_network_samples: np.ndarray,
