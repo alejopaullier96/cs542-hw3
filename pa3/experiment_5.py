@@ -1,3 +1,4 @@
+import csv
 import logging
 import os
 import time
@@ -61,9 +62,9 @@ def experiment_a():
         "volcanoes": load_volcanoes,
     }
     metric_names = ["aroc", "precision", "recall", "accuracy"]
-    lr = 1e-1
+    lr = 1e-2
     epsilon = 1e-5
-    max_iters = 10_000
+    max_iters = 100_000
     gamma = 0.0
 
     results = {
@@ -165,6 +166,20 @@ def experiment_a():
             row += f"{values.mean():>{width}.6f}{values.var():>{width}.6f}"
         logger.info(row)
 
+    summary_path = os.path.join(OUTPUT_DIR, "experiment_5a.csv")
+    with open(summary_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        header = ["dataset"]
+        for metric_name in metric_names:
+            header.extend([f"{metric_name} mean", f"{metric_name} var"])
+        writer.writerow(header)
+        for dataset_name in loaders:
+            row = [dataset_name]
+            for metric_name in metric_names:
+                values = np.asarray(results[dataset_name][metric_name])
+                row.extend([f"{values.mean():.6f}", f"{values.var():.6f}"])
+            writer.writerow(row)
+
     fig, ax = plt.subplots(figsize=(8, 4.5))
     x = np.arange(len(metric_names))
     width = 0.25
@@ -196,6 +211,7 @@ def experiment_a():
     plt.close()
 
     logger.info("Error bars on experiment_5a.png are standard deviations")
+    logger.info(f"Saved {summary_path}")
     logger.info(f"Saved {os.path.join(OUTPUT_DIR, 'experiment_5a.png')}")
     logger.info(f"Saved {os.path.join(OUTPUT_DIR, 'experiment_5a_roc.png')}")
     logger.info(f"Saved {os.path.join(OUTPUT_DIR, f'experiment_5{section}.txt')}")

@@ -20,7 +20,7 @@ Network inputs: 33
 Fold: 1
 Train size: 352
 Test size: 88
-Train time (s): 1.64
+Train time (s): 1.48
 Train accuracy: 0.9772727272727273
 AROC: 0.9979166666666667
 Precision: 0.9743589743589743
@@ -29,7 +29,7 @@ Accuracy: 0.9659090909090909
 Fold: 2
 Train size: 352
 Test size: 88
-Train time (s): 1.16
+Train time (s): 1.50
 Train accuracy: 0.9857954545454546
 AROC: 0.9994767137624281
 Precision: 1.0
@@ -38,7 +38,7 @@ Accuracy: 0.9772727272727273
 Fold: 3
 Train size: 352
 Test size: 88
-Train time (s): 1.20
+Train time (s): 1.08
 Train accuracy: 0.9772727272727273
 AROC: 0.9973835688121402
 Precision: 0.9743589743589743
@@ -47,7 +47,7 @@ Accuracy: 0.9772727272727273
 Fold: 4
 Train size: 352
 Test size: 88
-Train time (s): 1.14
+Train time (s): 1.01
 Train accuracy: 0.9829545454545454
 AROC: 1.0
 Precision: 1.0
@@ -56,7 +56,7 @@ Accuracy: 1.0
 Fold: 5
 Train size: 352
 Test size: 88
-Train time (s): 1.00
+Train time (s): 0.83
 Train accuracy: 0.9857954545454546
 AROC: 0.9740973312401884
 Precision: 0.9473684210526315
@@ -80,7 +80,7 @@ Network inputs: 24
 Fold: 1
 Train size: 59788
 Test size: 14948
-Train time (s): 3.52
+Train time (s): 3.90
 Train accuracy: 0.6161771592961799
 AROC: 0.5535778661593007
 Precision: 0.6247134819754115
@@ -89,7 +89,7 @@ Accuracy: 0.6148648648648649
 Fold: 2
 Train size: 59789
 Test size: 14947
-Train time (s): 3.33
+Train time (s): 4.04
 Train accuracy: 0.6163006573115456
 AROC: 0.5535311680374491
 Precision: 0.6246267101882075
@@ -98,7 +98,7 @@ Accuracy: 0.6147052920318459
 Fold: 3
 Train size: 59789
 Test size: 14947
-Train time (s): 3.68
+Train time (s): 4.95
 Train accuracy: 0.6157654418036763
 AROC: 0.5548438680634257
 Precision: 0.6257706962244545
@@ -107,7 +107,7 @@ Accuracy: 0.6175152204455744
 Fold: 4
 Train size: 59789
 Test size: 14947
-Train time (s): 3.45
+Train time (s): 4.71
 Train accuracy: 0.6167355199116894
 AROC: 0.5523434215551206
 Precision: 0.6255092880325944
@@ -116,7 +116,7 @@ Accuracy: 0.6177828326754533
 Fold: 5
 Train size: 59789
 Test size: 14947
-Train time (s): 3.63
+Train time (s): 3.72
 Train accuracy: 0.615614912442088
 AROC: 0.5475632937993855
 Precision: 0.6247747123249688
@@ -140,7 +140,7 @@ Network inputs: 225
 Fold: 1
 Train size: 1784
 Test size: 447
-Train time (s): 2.01
+Train time (s): 2.41
 Train accuracy: 0.718609865470852
 AROC: 0.7499999999999999
 Precision: 0.6018518518518519
@@ -158,7 +158,7 @@ Accuracy: 0.7085201793721974
 Fold: 3
 Train size: 1785
 Test size: 446
-Train time (s): 2.05
+Train time (s): 2.01
 Train accuracy: 0.7170868347338936
 AROC: 0.743835616438356
 Precision: 0.6153846153846154
@@ -167,7 +167,7 @@ Accuracy: 0.726457399103139
 Fold: 4
 Train size: 1785
 Test size: 446
-Train time (s): 2.11
+Train time (s): 2.50
 Train accuracy: 0.7165266106442577
 AROC: 0.7552739726027398
 Precision: 0.5795454545454546
@@ -176,7 +176,7 @@ Accuracy: 0.7040358744394619
 Fold: 5
 Train size: 1785
 Test size: 446
-Train time (s): 2.42
+Train time (s): 2.30
 Train accuracy: 0.7092436974789916
 AROC: 0.7621461187214612
 Precision: 0.6593406593406593
@@ -197,6 +197,7 @@ voting            0.993775      0.000098        0.979217        0.000385      0.
 spam              0.552372      0.000006        0.625079        0.000000      0.964762      0.000007        0.616075        0.000002
 volcanoes         0.746721      0.000185        0.605260        0.000986      0.417202      0.001301        0.719408        0.000148
 Error bars on experiment_5a.png are standard deviations
+Saved output/experiment_5/experiment_5a.csv
 Saved output/experiment_5/experiment_5a.png
 Saved output/experiment_5/experiment_5a_roc.png
 Saved output/experiment_5/experiment_5a.txt
