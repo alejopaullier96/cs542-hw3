@@ -61,8 +61,11 @@ class Softmax(Activation):
     def jacobian_single_example(self: Softmax,
                                 x: np.ndarray, 
                                 y_hat: np.ndarray) -> np.ndarray:
-        # TODO
-        ...
+        # https://stackoverflow.com/questions/33541930/how-to-implement-the-softmax-derivative-independently-from-any-loss-function
+        # softmax derivatives depend on whether i equals j or not
+        J = -np.outer(y_hat,y_hat) # -y_hat[i]*y_hat[j]  
+        np.fill_diagonal(J, np.diag(J)+y_hat) # y_hat*(1-y_hat)                       
+        return self.stretch * J 
 
 
     # this is done for you! This is because combining the
