@@ -36,7 +36,9 @@ class CategoricalCrossEntropy(LossFunction):
                  Y_hat: np.ndarray,
                  Y_gt: np.ndarray) -> np.ndarray:
         assert(Y_hat.shape == Y_gt.shape)
-
-        # TODO
-        ...
+        # the derivative of dL_dYhat = -1/Y_hat*N for the correct classes 1 and 0 for the incorrect
+        dL_dYhat = np.zeros_like(Y_hat)
+        dL_dYhat[Y_gt==1] += -1.0/(Y_hat[Y_gt==1] + DELTA) # apply only on the correct class using the mask
+        dL_dYhat /= Y_hat.shape[0] # we divie by the number of samples N
+        return dL_dYhat
 
