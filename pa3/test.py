@@ -32,8 +32,8 @@ def test_iris() -> None:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=12345, stratify=y)
     mu = X_train.mean(axis=0)
     sd = X_train.std(axis=0)
-    X_train = (X_train - mu) / sd
-    X_test = (X_test - mu) / sd
+    X_train = (X_train - mu)/sd
+    X_test = (X_test - mu)/sd
     header = Header()
     for i in range(X.shape[1]):
         header.add_feature(ContinuousFeature("x%d" % i, i))
