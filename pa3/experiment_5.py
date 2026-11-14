@@ -448,8 +448,299 @@ def experiment_b():
     logger.info(f"Saved {os.path.join(OUTPUT_DIR, f'experiment_5{section}.txt')}")
 
 
+def experiment_c():
+    section = "c"
+    logger = make_logger(section)
+    lr = 1e-2
+    epsilon = 1e-8
+    gamma = 0.01
+    dataset_name = "volcanoes"
+    activations = {
+        "linear": Linear,
+        "sigmoid": Sigmoid,
+        "relu": ReLU,
+        "tanh": Tanh,
+    }
+
+    logger.info("Experiment (c):\n")
+    logger.info("Dataset: volcanoes")
+    logger.info("Hidden activations: Linear, Sigmoid, ReLU, Tanh")
+    logger.info("Output: Sigmoid + binary cross-entropy")
+    logger.info(f"gamma: {gamma}")
+    logger.info("lr: 0.01")
+    logger.info("epsilon: 0")
+    logger.info("Hidden units: 5 values evenly spaced between 3 and f")
+    logger.info("Iterations: max(100 * f, 10000)")
+    logger.info("Folds: 5")
+    logger.info("Seed: 12345")
+    logger.info("Preprocessing: StandardScaler on continuous features only")
+    logger.info("Init: np.random.seed(12345) before every model")
+    logger.info("epsilon is 0 so each run uses its full iteration budget")
+
+    perceptron_aroc = None
+    summary_a_path = os.path.join(OUTPUT_DIR, "experiment_5a.csv")
+    if os.path.exists(summary_a_path):
+        with open(summary_a_path, newline="") as f:
+            for row in csv.DictReader(f):
+                if row["dataset"] == dataset_name:
+                    perceptron_aroc = float(row["aroc mean"])
+        if perceptron_aroc is not None:
+            logger.info(f"Perceptron reference: volcanoes mean AROC from experiment (a): {perceptron_aroc}")
+    else:
+        logger.info(f"No perceptron reference found at {summary_a_path}")
+
+    part_b_aroc = {}
+    part_b_iters = None
+    summary_b_path = os.path.join(OUTPUT_DIR, "experiment_5b.csv")
+    if os.path.exists(summary_b_path):
+        volcano_rows = []
+        with open(summary_b_path, newline="") as f:
+            for row in csv.DictReader(f):
+                if row["dataset"] == dataset_name:
+                    volcano_rows.append(row)
+        if volcano_rows:
+            part_b_iters = max(int(row["iters"]) for row in volcano_rows)
+            for row in volcano_rows:
+                if int(row["iters"]) == part_b_iters:
+                    part_b_aroc[row["activation"]] = float(row["aroc mean"])
+            logger.info(
+                f"Experiment (b) reference: volcanoes mean AROC at {part_b_iters} iterations, 5 hidden units"
+            )
+            for activation_name, aroc in part_b_aroc.items():
+                logger.info(f"volcanoes {activation_name} experiment (b) AROC: {aroc}")
+    else:
+        logger.info(f"No experiment (b) reference found at {summary_b_path}")
+
+    sep(logger)
+    logger.info("Volcanoes dataset")
+    header, X, y_gt = load_volcanoes()
+    X = np.asarray(X, dtype=float)
+    y_gt = np.asarray(y_gt).reshape(-1)
+
+    n_cont = 0
+    n_disc = 0
+    n_inputs = 0
+    cont_idx = []
+    for feature_idx, feature in enumerate(header.features):
+        if feature.type == FeatureType.DISCRETE:
+            n_disc += 1
+            n_inputs += len(feature.domain())
+        else:
+            n_cont += 1
+            n_inputs += 1
+            cont_idx.append(feature_idx)
+
+    f = n_inputs
+    hidden_unit_values = [int(round(v)) for v in np.linspace(3, f, 4)]
+    hidden_unit_values = list(dict.fromkeys(hidden_unit_values))
+    max_iters = max(100 * f, 10_000)
+
+    classes, counts = np.unique(y_gt, return_counts=True)
+    logger.info(f"Shape: {X.shape}")
+    logger.info(f"Class counts: {dict(zip(classes.tolist(), counts.tolist()))}")
+    logger.info(f"Continuous features: {n_cont}")
+    logger.info(f"Discrete features: {n_disc}")
+    logger.info(f"Network inputs f: {f}")
+    logger.info(f"Hidden units: {', '.join(str(h) for h in hidden_unit_values)}")
+    logger.info(f"Iterations: {max_iters}")
+
+    results = {
+        activation_name: {n_hidden: [] for n_hidden in hidden_unit_values}
+        for activation_name in activations
+    }
+    runtimes = {
+        activation_name: {n_hidden: [] for n_hidden in hidden_unit_values}
+        for activation_name in activations
+    }
+
+    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=12345)
+    for activation_name, activation_cls in activations.items():
+        sep(logger)
+        logger.info(f"Activation: {activation_name}")
+        for n_hidden in hidden_unit_values:
+            logger.info(f"Hidden units: {n_hidden}")
+            for fold, (train_idx, test_idx) in enumerate(skf.split(X, y_gt), start=1):
+                logger.info(f"Fold: {fold}")
+                logger.info(f"Train size: {len(train_idx)}")
+                logger.info(f"Test size: {len(test_idx)}")
+
+                X_train, X_test = X[train_idx].copy(), X[test_idx].copy()
+                y_train, y_test = y_gt[train_idx], y_gt[test_idx]
+
+                if cont_idx:
+                    scaler = StandardScaler()
+                    X_train[:, cont_idx] = scaler.fit_transform(X_train[:, cont_idx])
+                    X_test[:, cont_idx] = scaler.transform(X_test[:, cont_idx])
+
+                np.random.seed(12345)
+                model = ANNC(header, n_hidden, activation_cls())
+                optimizer = SGDOptimizer(model.parameters(), lr)
+
+                t0 = time.perf_counter()
+                model.fit(
+                    X_train,
+                    y_train,
+                    optimizer,
+                    gamma=gamma,
+                    epsilon=epsilon,
+                    max_iters=max_iters,
+                )
+                elapsed = time.perf_counter() - t0
+
+                train_accuracy = accuracy_score(y_train, model.predict(X_train))
+                logger.info(f"Train time (s): {elapsed:.2f}")
+                logger.info(f"Train accuracy: {train_accuracy}")
+
+                y_score = model.predict_proba(X_test).reshape(-1)
+                aroc = roc_auc_score(y_test, y_score)
+                results[activation_name][n_hidden].append(aroc)
+                runtimes[activation_name][n_hidden].append(elapsed)
+                logger.info(f"AROC: {aroc}")
+
+            values = np.asarray(results[activation_name][n_hidden])
+            times = np.asarray(runtimes[activation_name][n_hidden])
+            logger.info(f"Mean aroc: {values.mean()}")
+            logger.info(f"Variance aroc: {values.var()}")
+            logger.info(f"Mean train time (s): {times.mean()}")
+            logger.info(f"Variance train time (s): {times.var()}")
+            logger.info(f"Total train time (s): {times.sum()}")
+
+    sep(logger)
+    logger.info("Summary (mean and variance across 5 folds):")
+    header_row = (
+        f"{'activation':<12}{'hidden':>8}{'aroc mean':>14}{'aroc var':>14}"
+        f"{'time mean':>14}{'time var':>14}{'time total':>14}"
+    )
+    logger.info(header_row)
+    for activation_name in activations:
+        for n_hidden in hidden_unit_values:
+            values = np.asarray(results[activation_name][n_hidden])
+            times = np.asarray(runtimes[activation_name][n_hidden])
+            logger.info(
+                f"{activation_name:<12}{n_hidden:>8}"
+                f"{values.mean():>14.6f}{values.var():>14.6f}"
+                f"{times.mean():>14.2f}{times.var():>14.2f}{times.sum():>14.2f}"
+            )
+
+    summary_path = os.path.join(OUTPUT_DIR, "experiment_5c.csv")
+    with open(summary_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "dataset",
+            "activation",
+            "hidden units",
+            "iters",
+            "aroc mean",
+            "aroc var",
+            "time mean",
+            "time var",
+            "time total",
+        ])
+        for activation_name in activations:
+            for n_hidden in hidden_unit_values:
+                values = np.asarray(results[activation_name][n_hidden])
+                times = np.asarray(runtimes[activation_name][n_hidden])
+                writer.writerow([
+                    dataset_name,
+                    activation_name,
+                    n_hidden,
+                    max_iters,
+                    f"{values.mean():.6f}",
+                    f"{values.var():.6f}",
+                    f"{times.mean():.2f}",
+                    f"{times.var():.2f}",
+                    f"{times.sum():.2f}",
+                ])
+
+    fig, ax = plt.subplots(figsize=(7, 4.5))
+    for activation_name in activations:
+        means = [np.mean(results[activation_name][n_hidden]) for n_hidden in hidden_unit_values]
+        stds = [np.std(results[activation_name][n_hidden]) for n_hidden in hidden_unit_values]
+        ax.errorbar(hidden_unit_values, means, yerr=stds, capsize=3, marker="o", label=activation_name)
+    if perceptron_aroc is not None:
+        ax.axhline(perceptron_aroc, linestyle="--", color="gray", label="perceptron")
+    if part_b_aroc:
+        best_b_name = max(part_b_aroc, key=part_b_aroc.get)
+        ax.axhline(
+            part_b_aroc[best_b_name],
+            linestyle=":",
+            color="black",
+            label=f"best (b): {best_b_name}",
+        )
+    ax.set_xlabel("Hidden units")
+    ax.set_ylabel("AROC")
+    ax.set_ylim(0, 1.05)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUTPUT_DIR, "experiment_5c.png"), dpi=150)
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(7, 4.5))
+    for activation_name in activations:
+        totals = [np.sum(runtimes[activation_name][n_hidden]) for n_hidden in hidden_unit_values]
+        ax.plot(hidden_unit_values, totals, marker="o", label=activation_name)
+    ax.set_xlabel("Hidden units")
+    ax.set_ylabel("Total train time (s)")
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUTPUT_DIR, "experiment_5c_runtime.png"), dpi=150)
+    plt.close(fig)
+
+    sep(logger)
+    logger.info("Comparison with experiments (a) and (b) on volcanoes:")
+    logger.info("Perceptron: 1 hidden unit, Linear activation, gamma 0, trained to convergence")
+    if part_b_iters is not None:
+        logger.info(f"Experiment (b): 5 hidden units, gamma {gamma}, {part_b_iters} iterations")
+    largest_hidden = hidden_unit_values[-1]
+    best_at_width = {}
+    for n_hidden in hidden_unit_values:
+        best_name = max(activations, key=lambda name: np.mean(results[name][n_hidden]))
+        best_mean = float(np.mean(results[best_name][n_hidden]))
+        best_at_width[n_hidden] = best_name
+        logger.info(f"Best activation at {n_hidden} hidden units: {best_name} (mean AROC {best_mean:.6f})")
+
+    for activation_name in activations:
+        for n_hidden in hidden_unit_values:
+            mean = float(np.mean(results[activation_name][n_hidden]))
+            message = f"volcanoes {activation_name} @ {n_hidden} hidden units: {mean:.6f}"
+            if perceptron_aroc is not None:
+                message += f" (delta vs perceptron {mean - perceptron_aroc:+.6f})"
+            if activation_name in part_b_aroc:
+                message += f" (delta vs experiment b {mean - part_b_aroc[activation_name]:+.6f})"
+            logger.info(message)
+
+    best_c_name = best_at_width[largest_hidden]
+    best_c_mean = float(np.mean(results[best_c_name][largest_hidden]))
+    if part_b_aroc:
+        best_b_name = max(part_b_aroc, key=part_b_aroc.get)
+        logger.info(
+            f"Best activation in experiment (b) was {best_b_name} "
+            f"(mean AROC {part_b_aroc[best_b_name]:.6f}). "
+            f"Best activation in experiment (c) at {largest_hidden} hidden units is {best_c_name} "
+            f"(mean AROC {best_c_mean:.6f})."
+        )
+        if best_c_name == best_b_name:
+            logger.info(f"The same activation performed the best: {best_c_name}.")
+        else:
+            logger.info(f"Best activation in experiment (b): {best_b_name}.")
+            logger.info(f"Best activation in experiment (c): {best_c_name}.")
+    else:
+        logger.info(
+            f"Best activation in experiment (c) at {largest_hidden} hidden units is {best_c_name} "
+            f"(mean AROC {best_c_mean:.6f})"
+        )
+
+    logger.info("Error bars on experiment_5c.png are standard deviations")
+    logger.info("experiment_5c_runtime.png shows total train time across the 5 folds")
+    logger.info(f"Saved {summary_path}")
+    logger.info(f"Saved {os.path.join(OUTPUT_DIR, 'experiment_5c.png')}")
+    logger.info(f"Saved {os.path.join(OUTPUT_DIR, 'experiment_5c_runtime.png')}")
+    logger.info(f"Saved {os.path.join(OUTPUT_DIR, f'experiment_5{section}.txt')}")
+
+
 ### cd pa3 && python experiment_5.py
 ### cd pa3 && /opt/anaconda3/bin/python experiment_5.py
 if __name__ == "__main__":
     # experiment_a()
-    experiment_b()
+    # experiment_b()
+    experiment_c()
