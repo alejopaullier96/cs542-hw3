@@ -328,7 +328,354 @@ def experiment_a():
     logger.info(f"Saved {os.path.join(OUTPUT_DIR, f'experiment_7{section}.txt')}")
 
 
+def experiment_b():
+    section = "b"
+    logger = make_logger(section)
+    lr = 1e-2
+    epsilon = 0.0
+    gamma = 0.01
+    dataset_names = ["iris", "digits"]
+    activations = {
+        "linear": Linear,
+        "sigmoid": Sigmoid,
+        "relu": ReLU,
+        "tanh": Tanh,
+    }
+    part_a_path = os.path.join(OUTPUT_DIR, "experiment_7a.csv")
+    binary_c_path = os.path.join("output", "experiment_5", "experiment_5c.csv")
+
+    logger.info("Experiment (b):\n")
+    logger.info("Hidden activations: Linear, Sigmoid, ReLU, Tanh")
+    logger.info("Output: Softmax + categorical cross-entropy")
+    logger.info("Labels: one-hot encoded outside the model with np.eye")
+    logger.info(f"gamma: {gamma}")
+    logger.info("lr: 0.01")
+    logger.info("epsilon: 0")
+    logger.info("Hidden units: 4 values evenly spaced between 3 and 2*f")
+    logger.info("Iterations: max(100 * f, 10000), fixed for every width")
+    logger.info("f: number of network inputs for the dataset being trained")
+    logger.info("Folds: 5")
+    logger.info("Seed: 12345")
+    logger.info("Preprocessing: StandardScaler on continuous features only")
+    logger.info("Init: np.random.seed(12345) before every model")
+    logger.info("epsilon is 0 so each run uses its full iteration budget")
+    logger.info("AROC: weighted one-vs-rest")
+
+    part_a = {}
+    if os.path.exists(part_a_path):
+        with open(part_a_path, newline="") as f:
+            for row in csv.DictReader(f):
+                if int(row["iters"]) != 10_000:
+                    continue
+                dataset_curves = part_a.setdefault(row["dataset"], {})
+                dataset_curves.setdefault(row["activation"], {})[10_000] = float(row["aroc mean"])
+        logger.info("Experiment (a) reference: mean AROC at 10000 iterations, 5 hidden units")
+        for dataset_name, dataset_curves in part_a.items():
+            winner = best_activation(dataset_curves, 10_000)
+            logger.info(
+                f"{dataset_name}: best activation in experiment (a) is {winner} "
+                f"(mean AROC {dataset_curves[winner][10_000]:.6f})"
+            )
+    else:
+        logger.info(f"No experiment (a) reference found at {part_a_path}")
+
+    binary_c = {}
+    if os.path.exists(binary_c_path):
+        with open(binary_c_path, newline="") as f:
+            for row in csv.DictReader(f):
+                dataset_curves = binary_c.setdefault(row["dataset"], {})
+                activation_curve = dataset_curves.setdefault(row["activation"], {})
+                activation_curve[int(row["hidden units"])] = float(row["aroc mean"])
+        logger.info("Binary reference: experiment 5(c), volcanoes hidden-unit sweep")
+        for dataset_name, dataset_curves in binary_c.items():
+            widths = sorted(next(iter(dataset_curves.values())))
+            winner = best_activation(dataset_curves, widths[-1])
+            logger.info(
+                f"{dataset_name}: best activation at {widths[-1]} hidden units is {winner} "
+                f"(mean AROC {dataset_curves[winner][widths[-1]]:.6f})"
+            )
+            for activation_name, activation_curve in dataset_curves.items():
+                rose = strictly_increasing(curve_means(activation_curve, widths))
+                trend = "rose at every hidden-unit step" if rose else "did not rise at every hidden-unit step"
+                logger.info(f"{dataset_name} {activation_name}: AROC {trend}")
+    else:
+        logger.info(f"No binary hidden-unit reference found at {binary_c_path}")
+
+    results = {}
+    runtimes = {}
+    grids = {}
+    budgets = {}
+
+    for dataset_name in dataset_names:
+        sep(logger)
+        logger.info(f"{dataset_name.capitalize()} dataset")
+        header, X, y_gt = load_sklearn_classification(dataset_name)
+        n_classes = len(header.ground_truth.domain())
+        f = X.shape[1]
+        hidden_unit_values = [int(round(v)) for v in np.linspace(3, 2 * f, 4)]
+        hidden_unit_values = list(dict.fromkeys(hidden_unit_values))
+        max_iters = max(100 * f, 10_000)
+        grids[dataset_name] = hidden_unit_values
+        budgets[dataset_name] = max_iters
+
+        classes, counts = np.unique(y_gt, return_counts=True)
+        logger.info(f"Shape: {X.shape}")
+        logger.info(f"Class counts: {dict(zip(classes.tolist(), counts.tolist()))}")
+        logger.info(f"Classes: {n_classes}")
+        logger.info(f"Continuous features: {f}")
+        logger.info("Discrete features: 0")
+        logger.info(f"Network inputs f: {f}")
+        logger.info(f"Hidden units: {', '.join(str(h) for h in hidden_unit_values)}")
+        logger.info(f"Iterations: {max_iters}")
+
+        results[dataset_name] = {
+            activation_name: {n_hidden: [] for n_hidden in hidden_unit_values}
+            for activation_name in activations
+        }
+        runtimes[dataset_name] = {
+            activation_name: {n_hidden: [] for n_hidden in hidden_unit_values}
+            for activation_name in activations
+        }
+
+        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=12345)
+        for activation_name, activation_cls in activations.items():
+            sep(logger)
+            logger.info(f"Activation: {activation_name}")
+            for n_hidden in hidden_unit_values:
+                logger.info(f"Hidden units: {n_hidden}")
+                for fold, (train_idx, test_idx) in enumerate(skf.split(X, y_gt), start=1):
+                    logger.info(f"Fold: {fold}")
+                    logger.info(f"Train size: {len(train_idx)}")
+                    logger.info(f"Test size: {len(test_idx)}")
+
+                    X_train, X_test = X[train_idx].copy(), X[test_idx].copy()
+                    y_train, y_test = y_gt[train_idx], y_gt[test_idx]
+
+                    scaler = StandardScaler()
+                    X_train = scaler.fit_transform(X_train)
+                    X_test = scaler.transform(X_test)
+
+                    np.random.seed(12345)
+                    model = ANNC(header, n_hidden, activation_cls())
+                    optimizer = SGDOptimizer(model.parameters(), lr)
+
+                    t0 = time.perf_counter()
+                    model.fit(
+                        X_train,
+                        one_hot(y_train, n_classes),
+                        optimizer,
+                        gamma=gamma,
+                        epsilon=epsilon,
+                        max_iters=max_iters,
+                    )
+                    elapsed = time.perf_counter() - t0
+
+                    train_accuracy = accuracy_score(y_train, model.predict(X_train))
+                    logger.info(f"Train time (s): {elapsed:.2f}")
+                    logger.info(f"Train accuracy: {train_accuracy}")
+
+                    y_score = model.predict_proba(X_test)
+                    aroc = roc_auc_score(y_test, y_score, multi_class="ovr", average="weighted")
+                    results[dataset_name][activation_name][n_hidden].append(aroc)
+                    runtimes[dataset_name][activation_name][n_hidden].append(elapsed)
+                    logger.info(f"AROC: {aroc}")
+
+                values = np.asarray(results[dataset_name][activation_name][n_hidden])
+                times = np.asarray(runtimes[dataset_name][activation_name][n_hidden])
+                logger.info(f"Mean aroc: {values.mean()}")
+                logger.info(f"Variance aroc: {values.var()}")
+                logger.info(f"Mean train time (s): {times.mean()}")
+                logger.info(f"Variance train time (s): {times.var()}")
+                logger.info(f"Total train time (s): {times.sum()}")
+
+    sep(logger)
+    logger.info("Summary (mean and variance across 5 folds):")
+    header_row = (
+        f"{'dataset':<12}{'activation':<12}{'hidden':>8}{'aroc mean':>14}{'aroc var':>14}"
+        f"{'time mean':>14}{'time var':>14}{'time total':>14}"
+    )
+    logger.info(header_row)
+    for dataset_name in dataset_names:
+        for activation_name in activations:
+            for n_hidden in grids[dataset_name]:
+                values = np.asarray(results[dataset_name][activation_name][n_hidden])
+                times = np.asarray(runtimes[dataset_name][activation_name][n_hidden])
+                logger.info(
+                    f"{dataset_name:<12}{activation_name:<12}{n_hidden:>8}"
+                    f"{values.mean():>14.6f}{values.var():>14.6f}"
+                    f"{times.mean():>14.2f}{times.var():>14.2f}{times.sum():>14.2f}"
+                )
+
+    summary_path = os.path.join(OUTPUT_DIR, "experiment_7b.csv")
+    with open(summary_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "dataset",
+            "activation",
+            "hidden units",
+            "iters",
+            "aroc mean",
+            "aroc var",
+            "time mean",
+            "time var",
+            "time total",
+        ])
+        for dataset_name in dataset_names:
+            for activation_name in activations:
+                for n_hidden in grids[dataset_name]:
+                    values = np.asarray(results[dataset_name][activation_name][n_hidden])
+                    times = np.asarray(runtimes[dataset_name][activation_name][n_hidden])
+                    writer.writerow([
+                        dataset_name,
+                        activation_name,
+                        n_hidden,
+                        budgets[dataset_name],
+                        f"{values.mean():.6f}",
+                        f"{values.var():.6f}",
+                        f"{times.mean():.2f}",
+                        f"{times.var():.2f}",
+                        f"{times.sum():.2f}",
+                    ])
+
+    curves = {
+        dataset_name: {
+            activation_name: {
+                n_hidden: float(np.mean(results[dataset_name][activation_name][n_hidden]))
+                for n_hidden in grids[dataset_name]
+            }
+            for activation_name in activations
+        }
+        for dataset_name in dataset_names
+    }
+
+    fig, axes = plt.subplots(1, len(dataset_names), figsize=(10, 4.5), sharey=True)
+    for ax, dataset_name in zip(axes, dataset_names):
+        for activation_name in activations:
+            means = curve_means(curves[dataset_name][activation_name], grids[dataset_name])
+            stds = [
+                float(np.std(results[dataset_name][activation_name][n_hidden]))
+                for n_hidden in grids[dataset_name]
+            ]
+            ax.errorbar(grids[dataset_name], means, yerr=stds, capsize=3, marker="o", label=activation_name)
+        ax.set_title(dataset_name)
+        ax.set_xlabel("Hidden units")
+        ax.set_ylim(0, 1.05)
+        ax.legend()
+    axes[0].set_ylabel("AROC")
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUTPUT_DIR, "experiment_7b.png"), dpi=150)
+    plt.close(fig)
+
+    fig, axes = plt.subplots(1, len(dataset_names), figsize=(10, 4.5), sharey=False)
+    for ax, dataset_name in zip(axes, dataset_names):
+        for activation_name in activations:
+            totals = [
+                float(np.sum(runtimes[dataset_name][activation_name][n_hidden]))
+                for n_hidden in grids[dataset_name]
+            ]
+            ax.plot(grids[dataset_name], totals, marker="o", label=activation_name)
+        ax.set_title(dataset_name)
+        ax.set_xlabel("Hidden units")
+        ax.legend()
+    axes[0].set_ylabel("Total train time (s)")
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUTPUT_DIR, "experiment_7b_runtime.png"), dpi=150)
+    plt.close(fig)
+
+    sep(logger)
+    logger.info("Comparison with experiment 7(a) at 10000 iterations and 5 hidden units:")
+    multiclass_winners = {}
+    multiclass_relu_rose = {}
+    multiclass_others_rose = {}
+    for dataset_name in dataset_names:
+        widths = grids[dataset_name]
+        dataset_curves = curves[dataset_name]
+        for n_hidden in widths:
+            winner = best_activation(dataset_curves, n_hidden)
+            logger.info(
+                f"Best activation at {n_hidden} hidden units on {dataset_name}: {winner} "
+                f"(mean AROC {dataset_curves[winner][n_hidden]:.6f})"
+            )
+        for activation_name in activations:
+            rose = strictly_increasing(curve_means(dataset_curves[activation_name], widths))
+            trend = "rose at every hidden-unit step" if rose else "did not rise at every hidden-unit step"
+            logger.info(f"{dataset_name} {activation_name}: AROC {trend}")
+            for n_hidden in widths:
+                mean = dataset_curves[activation_name][n_hidden]
+                message = f"{dataset_name} {activation_name} @ {n_hidden} hidden units: {mean:.6f}"
+                reference = part_a.get(dataset_name, {}).get(activation_name, {}).get(10_000)
+                if reference is not None:
+                    message += f" (delta vs experiment a {mean - reference:+.6f})"
+                logger.info(message)
+        largest = widths[-1]
+        multiclass_winners[dataset_name] = best_activation(dataset_curves, largest)
+        multiclass_relu_rose[dataset_name] = strictly_increasing(curve_means(dataset_curves["relu"], widths))
+        multiclass_others_rose[dataset_name] = any(
+            strictly_increasing(curve_means(dataset_curves[name], widths))
+            for name in activations
+            if name != "relu"
+        )
+
+    if "volcanoes" not in binary_c:
+        logger.info("Binary experiment 5(c) was not available, so the trend comparison is unanswered.")
+    else:
+        volcano = binary_c["volcanoes"]
+        widths = sorted(next(iter(volcano.values())))
+        binary_winner = best_activation(volcano, widths[-1])
+        binary_relu_rose = strictly_increasing(curve_means(volcano["relu"], widths))
+        binary_others_rose = any(
+            strictly_increasing(curve_means(volcano[name], widths))
+            for name in volcano
+            if name != "relu"
+        )
+        logger.info(
+            f"Binary volcanoes at {widths[-1]} hidden units: best activation {binary_winner}. "
+            f"ReLU rose at every width: {binary_relu_rose}. "
+            f"Another activation rose at every width: {binary_others_rose}."
+        )
+        same_winner = all(winner == binary_winner for winner in multiclass_winners.values())
+        same_trend = all(
+            multiclass_relu_rose[dataset_name] == binary_relu_rose
+            and multiclass_others_rose[dataset_name] == binary_others_rose
+            for dataset_name in dataset_names
+        )
+        if same_winner:
+            logger.info(
+                f"Same best activation as the binary hidden-unit sweep at the largest width: {binary_winner}."
+            )
+        else:
+            summary = ", ".join(
+                f"{dataset_name} {activation_name}"
+                for dataset_name, activation_name in multiclass_winners.items()
+            )
+            logger.info(f"Best binary activation at the largest width: {binary_winner}.")
+            logger.info(f"Best multiclass activations at the largest width: {summary}.")
+        if same_trend:
+            logger.info(
+                "Same trend as the binary hidden-unit sweep: ReLU rose with width, "
+                "and the other activations did not rise at every width."
+            )
+        else:
+            logger.info(
+                "The hidden-unit trend differs from the binary sweep. "
+                "On volcanoes, ReLU rose with width and the other activations did not rise at every width."
+            )
+            for dataset_name in dataset_names:
+                logger.info(
+                    f"{dataset_name}: ReLU rose at every width: {multiclass_relu_rose[dataset_name]}. "
+                    f"Another activation rose at every width: {multiclass_others_rose[dataset_name]}."
+                )
+
+    logger.info("Error bars on experiment_7b.png are standard deviations")
+    logger.info("experiment_7b_runtime.png shows total train time across the 5 folds")
+    logger.info(f"Saved {summary_path}")
+    logger.info(f"Saved {os.path.join(OUTPUT_DIR, 'experiment_7b.png')}")
+    logger.info(f"Saved {os.path.join(OUTPUT_DIR, 'experiment_7b_runtime.png')}")
+    logger.info(f"Saved {os.path.join(OUTPUT_DIR, f'experiment_7{section}.txt')}")
+
+
 ### cd pa3 && python experiment_7.py
 ### cd pa3 && /opt/anaconda3/bin/python experiment_7.py
 if __name__ == "__main__":
-    experiment_a()
+    # experiment_a()
+    experiment_b()
