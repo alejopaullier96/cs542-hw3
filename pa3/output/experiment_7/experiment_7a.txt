@@ -1,0 +1,1465 @@
+Experiment (a):
+
+Model: 5 hidden units
+Hidden activations: Linear, Sigmoid, ReLU, Tanh
+Output: Softmax + categorical cross-entropy
+Labels: one-hot encoded outside the model with np.eye
+gamma: 0.01
+lr: 0.01
+epsilon: 0
+Iterations: 100, 2575, 5050, 7525, 10000
+Folds: 5
+Seed: 12345
+Preprocessing: StandardScaler on continuous features only
+Init: np.random.seed(12345) before every model
+epsilon is 0 so each run uses its full iteration budget
+AROC: weighted one-vs-rest
+Binary reference: experiment 5(b), 5 hidden units, gamma 0.01
+volcanoes: AROC rose at every iteration step for every activation. Best activation at 10000 iterations: relu (mean AROC 0.909832)
+spam: AROC rose at every iteration step for every activation. Best activation at 10000 iterations: relu (mean AROC 0.750685)
+----------------------------------------------------------------------------------------------------
+Iris dataset
+Shape: (150, 4)
+Class counts: {0: 50, 1: 50, 2: 50}
+Classes: 3
+Continuous features: 4
+Discrete features: 0
+Network inputs: 4
+----------------------------------------------------------------------------------------------------
+Activation: linear
+Iterations: 100
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 0.08
+Train accuracy: 0.7583333333333333
+AROC: 0.9583333333333334
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.7666666666666667
+AROC: 0.9933333333333334
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.7583333333333333
+AROC: 0.9166666666666666
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.7583333333333333
+AROC: 0.9166666666666665
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.8
+AROC: 0.865
+Mean aroc: 0.9299999999999999
+Variance aroc: 0.0018788888888888922
+Iterations: 2575
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 1.61
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 1.66
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 1.60
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 1.61
+Train accuracy: 0.9833333333333333
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 1.62
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+Iterations: 5050
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 3.19
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 3.23
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 3.19
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 3.27
+Train accuracy: 0.975
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 3.25
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+Iterations: 7525
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 4.85
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 4.90
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 4.79
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 4.85
+Train accuracy: 0.975
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 4.80
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+Iterations: 10000
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 6.44
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 6.36
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 6.40
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 6.53
+Train accuracy: 0.975
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 6.41
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+----------------------------------------------------------------------------------------------------
+Activation: sigmoid
+Iterations: 100
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 0.07
+Train accuracy: 0.525
+AROC: 0.5933333333333334
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 0.07
+Train accuracy: 0.5
+AROC: 0.62
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 0.07
+Train accuracy: 0.5083333333333333
+AROC: 0.4799999999999999
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 0.07
+Train accuracy: 0.5
+AROC: 0.535
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 0.07
+Train accuracy: 0.525
+AROC: 0.48000000000000004
+Mean aroc: 0.5416666666666667
+Variance aroc: 0.0032911111111111127
+Iterations: 2575
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 1.75
+Train accuracy: 0.8916666666666667
+AROC: 0.985
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 1.73
+Train accuracy: 0.9
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 1.73
+Train accuracy: 0.9166666666666666
+AROC: 0.9583333333333334
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 1.73
+Train accuracy: 0.8833333333333333
+AROC: 0.9816666666666667
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 1.74
+Train accuracy: 0.8916666666666667
+AROC: 0.9683333333333334
+Mean aroc: 0.9786666666666667
+Variance aroc: 0.00020488888888888835
+Iterations: 5050
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 3.49
+Train accuracy: 0.9083333333333333
+AROC: 0.9983333333333333
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 3.32
+Train accuracy: 0.925
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 3.48
+Train accuracy: 0.925
+AROC: 0.975
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 3.39
+Train accuracy: 0.9083333333333333
+AROC: 0.9866666666666667
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 3.45
+Train accuracy: 0.9083333333333333
+AROC: 0.9883333333333333
+Mean aroc: 0.9896666666666667
+Variance aroc: 8.155555555555554e-05
+Iterations: 7525
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 5.01
+Train accuracy: 0.9333333333333333
+AROC: 0.9983333333333333
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 4.94
+Train accuracy: 0.9416666666666667
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 4.96
+Train accuracy: 0.9416666666666667
+AROC: 0.9816666666666668
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 4.95
+Train accuracy: 0.9333333333333333
+AROC: 0.9900000000000001
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 4.93
+Train accuracy: 0.9166666666666666
+AROC: 0.9933333333333334
+Mean aroc: 0.9926666666666668
+Variance aroc: 4.2888888888888134e-05
+Iterations: 10000
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 6.56
+Train accuracy: 0.9416666666666667
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 6.53
+Train accuracy: 0.95
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 6.53
+Train accuracy: 0.9416666666666667
+AROC: 0.9816666666666668
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 6.53
+Train accuracy: 0.9333333333333333
+AROC: 0.9900000000000001
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 6.53
+Train accuracy: 0.9166666666666666
+AROC: 0.9949999999999999
+Mean aroc: 0.9933333333333334
+Variance aroc: 4.777777777777695e-05
+----------------------------------------------------------------------------------------------------
+Activation: relu
+Iterations: 100
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.6166666666666667
+AROC: 0.8566666666666668
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.625
+AROC: 0.895
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.6333333333333333
+AROC: 0.8766666666666667
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.625
+AROC: 0.825
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.6333333333333333
+AROC: 0.8283333333333334
+Mean aroc: 0.8563333333333334
+Variance aroc: 0.0007348888888888897
+Iterations: 2575
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 1.65
+Train accuracy: 0.9666666666666667
+AROC: 0.9966666666666666
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 1.63
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 1.83
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 1.63
+Train accuracy: 0.975
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 1.63
+Train accuracy: 0.9666666666666667
+AROC: 0.9949999999999999
+Mean aroc: 0.9976666666666667
+Variance aroc: 4.0000000000001845e-06
+Iterations: 5050
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 3.20
+Train accuracy: 0.975
+AROC: 0.9966666666666666
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 3.20
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 3.19
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 3.20
+Train accuracy: 0.9833333333333333
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 3.20
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9986666666666666
+Variance aroc: 2.66666666666679e-06
+Iterations: 7525
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 4.77
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 4.76
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 4.77
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 4.77
+Train accuracy: 0.9833333333333333
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 4.77
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+Iterations: 10000
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 6.34
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 6.32
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 6.34
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 6.36
+Train accuracy: 0.9833333333333333
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 6.32
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+----------------------------------------------------------------------------------------------------
+Activation: tanh
+Iterations: 100
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.4166666666666667
+AROC: 0.7283333333333334
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.38333333333333336
+AROC: 0.75
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.43333333333333335
+AROC: 0.6566666666666667
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.4166666666666667
+AROC: 0.6716666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 0.06
+Train accuracy: 0.4666666666666667
+AROC: 0.575
+Mean aroc: 0.6763333333333333
+Variance aroc: 0.0037615555555555583
+Iterations: 2575
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 1.65
+Train accuracy: 0.9666666666666667
+AROC: 0.9966666666666666
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 1.65
+Train accuracy: 0.975
+AROC: 0.9983333333333333
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 1.64
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 1.64
+Train accuracy: 0.9833333333333333
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 1.64
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9983333333333334
+Variance aroc: 2.2222222222223246e-06
+Iterations: 5050
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 3.22
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 3.27
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 3.24
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 3.22
+Train accuracy: 0.9833333333333333
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 3.28
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+Iterations: 7525
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 4.84
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 4.86
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 4.96
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 5.01
+Train accuracy: 0.9833333333333333
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 5.04
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+Iterations: 10000
+Fold: 1
+Train size: 120
+Test size: 30
+Train time (s): 6.50
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 2
+Train size: 120
+Test size: 30
+Train time (s): 6.63
+Train accuracy: 0.975
+AROC: 1.0
+Fold: 3
+Train size: 120
+Test size: 30
+Train time (s): 6.66
+Train accuracy: 0.9583333333333334
+AROC: 1.0
+Fold: 4
+Train size: 120
+Test size: 30
+Train time (s): 6.53
+Train accuracy: 0.9833333333333333
+AROC: 0.9966666666666666
+Fold: 5
+Train size: 120
+Test size: 30
+Train time (s): 6.51
+Train accuracy: 0.9666666666666667
+AROC: 1.0
+Mean aroc: 0.9993333333333332
+Variance aroc: 1.77777777777786e-06
+----------------------------------------------------------------------------------------------------
+Digits dataset
+Shape: (1797, 64)
+Class counts: {0: 178, 1: 182, 2: 177, 3: 183, 4: 181, 5: 182, 6: 181, 7: 179, 8: 174, 9: 180}
+Classes: 10
+Continuous features: 64
+Discrete features: 0
+Network inputs: 64
+----------------------------------------------------------------------------------------------------
+Activation: linear
+Iterations: 100
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 1.83
+Train accuracy: 0.3465553235908142
+AROC: 0.7283815288831915
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 2.17
+Train accuracy: 0.337508698677801
+AROC: 0.7621112419476712
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 1.96
+Train accuracy: 0.34144645340751045
+AROC: 0.7394961517916955
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 1.80
+Train accuracy: 0.3463143254520167
+AROC: 0.7437166917885221
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 1.69
+Train accuracy: 0.34075104311543813
+AROC: 0.7360463161543472
+Mean aroc: 0.7419503861130855
+Variance aroc: 0.00012691502768584774
+Iterations: 2575
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 55.96
+Train accuracy: 0.8559498956158664
+AROC: 0.9704999108155283
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 50.79
+Train accuracy: 0.8531663187195546
+AROC: 0.9855352675583153
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 63.73
+Train accuracy: 0.8150208623087621
+AROC: 0.9780171032485027
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 43.15
+Train accuracy: 0.8365785813630042
+AROC: 0.974037275055906
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 41.24
+Train accuracy: 0.8477051460361613
+AROC: 0.975718582427991
+Mean aroc: 0.9767616278212486
+Variance aroc: 2.5254422865285467e-05
+Iterations: 5050
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 78.50
+Train accuracy: 0.9234516353514266
+AROC: 0.984459060652301
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 81.90
+Train accuracy: 0.9234516353514266
+AROC: 0.9952333485567633
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 77.55
+Train accuracy: 0.9214186369958275
+AROC: 0.9913929128609247
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 72.25
+Train accuracy: 0.9283727399165508
+AROC: 0.9868868127839501
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 72.95
+Train accuracy: 0.9186369958275382
+AROC: 0.9888912264177434
+Mean aroc: 0.9893726722543364
+Variance aroc: 1.3796753041214917e-05
+Iterations: 7525
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 108.46
+Train accuracy: 0.9485038274182325
+AROC: 0.9911209063755791
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 108.82
+Train accuracy: 0.9471120389700766
+AROC: 0.9971964735545172
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 113.56
+Train accuracy: 0.9478442280945758
+AROC: 0.9938339142681643
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 120.60
+Train accuracy: 0.9541029207232267
+AROC: 0.9941060011419677
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 119.38
+Train accuracy: 0.9499304589707928
+AROC: 0.9956667992732211
+Mean aroc: 0.9943848189226898
+Variance aroc: 4.116647159247224e-06
+Iterations: 10000
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 168.73
+Train accuracy: 0.9610299234516354
+AROC: 0.995424461487499
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 179.67
+Train accuracy: 0.9561586638830898
+AROC: 0.9980279873449523
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 162.37
+Train accuracy: 0.958970792767733
+AROC: 0.9946788974124631
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 169.71
+Train accuracy: 0.9659248956884562
+AROC: 0.9959579832349386
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 169.79
+Train accuracy: 0.958970792767733
+AROC: 0.9964784894372737
+Mean aroc: 0.9961135637834253
+Variance aroc: 1.2711046366109793e-06
+----------------------------------------------------------------------------------------------------
+Activation: sigmoid
+Iterations: 100
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 1.66
+Train accuracy: 0.12108559498956159
+AROC: 0.570444477112749
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 1.29
+Train accuracy: 0.116214335421016
+AROC: 0.5897400565847704
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 1.51
+Train accuracy: 0.12100139082058414
+AROC: 0.5708698515983002
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 1.56
+Train accuracy: 0.12100139082058414
+AROC: 0.5912353439055303
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 1.27
+Train accuracy: 0.11474269819193324
+AROC: 0.5809335540844586
+Mean aroc: 0.5806446566571617
+Variance aroc: 7.891257892727998e-05
+Iterations: 2575
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 42.10
+Train accuracy: 0.5400139178844816
+AROC: 0.878639060887513
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 43.95
+Train accuracy: 0.5400139178844816
+AROC: 0.8888463659451219
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 42.50
+Train accuracy: 0.5403337969401947
+AROC: 0.8904664367351335
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 41.80
+Train accuracy: 0.5479833101529903
+AROC: 0.8950703671605336
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 39.97
+Train accuracy: 0.5431154381084841
+AROC: 0.8916967983083257
+Mean aroc: 0.8889438058073255
+Variance aroc: 3.0725877811330326e-05
+Iterations: 5050
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 81.10
+Train accuracy: 0.721642310368824
+AROC: 0.9458907518806327
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 79.39
+Train accuracy: 0.7049408489909533
+AROC: 0.9521988666711749
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 81.76
+Train accuracy: 0.713490959666203
+AROC: 0.955497886540427
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 78.77
+Train accuracy: 0.7107093184979137
+AROC: 0.9496844738441668
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 94.69
+Train accuracy: 0.7072322670375522
+AROC: 0.9494114315544561
+Mean aroc: 0.9505366820981715
+Variance aroc: 1.0190704470630504e-05
+Iterations: 7525
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 135.46
+Train accuracy: 0.8037578288100209
+AROC: 0.9628809484490887
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 112.67
+Train accuracy: 0.7961029923451636
+AROC: 0.971508634069579
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 109.87
+Train accuracy: 0.7990264255910987
+AROC: 0.9726622981416193
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 114.28
+Train accuracy: 0.8122392211404729
+AROC: 0.96653871056995
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 113.21
+Train accuracy: 0.8025034770514604
+AROC: 0.9661680031465407
+Mean aroc: 0.9679517188753556
+Variance aroc: 1.3146429942184173e-05
+Iterations: 10000
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 158.43
+Train accuracy: 0.8510786360473208
+AROC: 0.9714403644182051
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 147.07
+Train accuracy: 0.8302018093249826
+AROC: 0.980522204319991
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 169.62
+Train accuracy: 0.8303198887343533
+AROC: 0.9784285398638134
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 148.71
+Train accuracy: 0.8435326842837274
+AROC: 0.9735979827385212
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 167.30
+Train accuracy: 0.8442280945757997
+AROC: 0.9753519892220107
+Mean aroc: 0.9758682161125082
+Variance aroc: 1.0648236869693326e-05
+----------------------------------------------------------------------------------------------------
+Activation: relu
+Iterations: 100
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 3.06
+Train accuracy: 0.1885873347251218
+AROC: 0.615216286146254
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 1.73
+Train accuracy: 0.17536534446764093
+AROC: 0.64405800731182
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 1.77
+Train accuracy: 0.17385257301808066
+AROC: 0.6450964418568251
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 1.64
+Train accuracy: 0.18776077885952713
+AROC: 0.6441992942872892
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 1.65
+Train accuracy: 0.17732962447844228
+AROC: 0.6344368843062292
+Mean aroc: 0.6366013827816834
+Variance aroc: 0.00012950058981549907
+Iterations: 2575
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 43.51
+Train accuracy: 0.7494780793319415
+AROC: 0.9444646242687607
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 45.01
+Train accuracy: 0.7536534446764092
+AROC: 0.9652972156640601
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 39.49
+Train accuracy: 0.7406119610570236
+AROC: 0.9587894117829645
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 36.14
+Train accuracy: 0.760778859527121
+AROC: 0.950585410916752
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 37.89
+Train accuracy: 0.7489568845618915
+AROC: 0.9567819633001529
+Mean aroc: 0.9551837251865379
+Variance aroc: 5.077632982952093e-05
+Iterations: 5050
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 72.20
+Train accuracy: 0.8496868475991649
+AROC: 0.9709609852646346
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 74.83
+Train accuracy: 0.8385525400139179
+AROC: 0.986453877989109
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 82.96
+Train accuracy: 0.8379694019471489
+AROC: 0.9794876164433745
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 75.32
+Train accuracy: 0.8553546592489569
+AROC: 0.9785606240141859
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 71.66
+Train accuracy: 0.8504867872044506
+AROC: 0.9768637252360292
+Mean aroc: 0.9784653657894665
+Variance aroc: 2.4750275443304086e-05
+Iterations: 7525
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 106.57
+Train accuracy: 0.9039665970772442
+AROC: 0.9795205907507537
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 105.04
+Train accuracy: 0.8928322894919972
+AROC: 0.9917947132719235
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 106.72
+Train accuracy: 0.8949930458970793
+AROC: 0.9874127732484259
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 106.50
+Train accuracy: 0.8998609179415855
+AROC: 0.9858955308956576
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 105.51
+Train accuracy: 0.9047287899860917
+AROC: 0.9875405390527626
+Mean aroc: 0.9864328294439046
+Variance aroc: 1.5800968420757436e-05
+Iterations: 10000
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 145.25
+Train accuracy: 0.9241475295755045
+AROC: 0.9868097651932934
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 143.60
+Train accuracy: 0.9144050104384134
+AROC: 0.9939983468204429
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 139.87
+Train accuracy: 0.9151599443671766
+AROC: 0.9930761444406919
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 143.67
+Train accuracy: 0.9242002781641169
+AROC: 0.9888607731740926
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 142.62
+Train accuracy: 0.9269819193324061
+AROC: 0.9905243637531704
+Mean aroc: 0.9906538786763383
+Variance aroc: 7.012409705624814e-06
+----------------------------------------------------------------------------------------------------
+Activation: tanh
+Iterations: 100
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 1.36
+Train accuracy: 0.1266527487821851
+AROC: 0.5823807207510051
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 1.27
+Train accuracy: 0.12317327766179541
+AROC: 0.6146247505366585
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 1.37
+Train accuracy: 0.13212795549374132
+AROC: 0.5843249265280908
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 1.47
+Train accuracy: 0.12517385257301808
+AROC: 0.6114662902816694
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 1.36
+Train accuracy: 0.11961057023643949
+AROC: 0.599717974115005
+Mean aroc: 0.5985029324424859
+Variance aroc: 0.00017807591058556307
+Iterations: 2575
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 36.05
+Train accuracy: 0.6805845511482255
+AROC: 0.9237504188076657
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 36.55
+Train accuracy: 0.6701461377870563
+AROC: 0.9389585423696477
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 35.55
+Train accuracy: 0.6696801112656467
+AROC: 0.937512551463465
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 36.37
+Train accuracy: 0.6815020862308763
+AROC: 0.9374550833874898
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 41.12
+Train accuracy: 0.6627260083449235
+AROC: 0.9309636057926559
+Mean aroc: 0.9337280403641849
+Variance aroc: 3.255331112253431e-05
+Iterations: 5050
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 80.72
+Train accuracy: 0.8496868475991649
+AROC: 0.9678930178359143
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 71.31
+Train accuracy: 0.826026443980515
+AROC: 0.9795719496542222
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 77.45
+Train accuracy: 0.8122392211404729
+AROC: 0.9774451764498937
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 82.77
+Train accuracy: 0.8414464534075105
+AROC: 0.9734485585805346
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 73.36
+Train accuracy: 0.8428372739916551
+AROC: 0.9732400940963948
+Mean aroc: 0.9743197593233919
+Variance aroc: 1.6116281873901203e-05
+Iterations: 7525
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 108.87
+Train accuracy: 0.9255393180236604
+AROC: 0.9814976653596077
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 107.42
+Train accuracy: 0.9081419624217119
+AROC: 0.9930538193168339
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 116.15
+Train accuracy: 0.9068150208623088
+AROC: 0.9919532082178132
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 111.66
+Train accuracy: 0.913769123783032
+AROC: 0.98687667222827
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 109.61
+Train accuracy: 0.9179415855354659
+AROC: 0.9877871780057723
+Mean aroc: 0.9882337086256594
+Variance aroc: 1.6896672110332733e-05
+Iterations: 10000
+Fold: 1
+Train size: 1437
+Test size: 360
+Train time (s): 146.10
+Train accuracy: 0.9498956158663883
+AROC: 0.9878895941975865
+Fold: 2
+Train size: 1437
+Test size: 360
+Train time (s): 142.76
+Train accuracy: 0.9359777313848295
+AROC: 0.9970334959561539
+Fold: 3
+Train size: 1438
+Test size: 359
+Train time (s): 148.02
+Train accuracy: 0.9422809457579973
+AROC: 0.994205111396859
+Fold: 4
+Train size: 1438
+Test size: 359
+Train time (s): 156.22
+Train accuracy: 0.9443671766342142
+AROC: 0.9913337701512678
+Fold: 5
+Train size: 1438
+Test size: 359
+Train time (s): 160.04
+Train accuracy: 0.9450625869262865
+AROC: 0.9918695944814697
+Mean aroc: 0.9924663132366673
+Variance aroc: 9.29353226216766e-06
+----------------------------------------------------------------------------------------------------
+Summary (mean and variance of AROC across 5 folds):
+dataset     activation     iters     aroc mean      aroc var
+iris        linear           100      0.930000      0.001879
+iris        linear          2575      0.999333      0.000002
+iris        linear          5050      0.999333      0.000002
+iris        linear          7525      0.999333      0.000002
+iris        linear         10000      0.999333      0.000002
+iris        sigmoid          100      0.541667      0.003291
+iris        sigmoid         2575      0.978667      0.000205
+iris        sigmoid         5050      0.989667      0.000082
+iris        sigmoid         7525      0.992667      0.000043
+iris        sigmoid        10000      0.993333      0.000048
+iris        relu             100      0.856333      0.000735
+iris        relu            2575      0.997667      0.000004
+iris        relu            5050      0.998667      0.000003
+iris        relu            7525      0.999333      0.000002
+iris        relu           10000      0.999333      0.000002
+iris        tanh             100      0.676333      0.003762
+iris        tanh            2575      0.998333      0.000002
+iris        tanh            5050      0.999333      0.000002
+iris        tanh            7525      0.999333      0.000002
+iris        tanh           10000      0.999333      0.000002
+digits      linear           100      0.741950      0.000127
+digits      linear          2575      0.976762      0.000025
+digits      linear          5050      0.989373      0.000014
+digits      linear          7525      0.994385      0.000004
+digits      linear         10000      0.996114      0.000001
+digits      sigmoid          100      0.580645      0.000079
+digits      sigmoid         2575      0.888944      0.000031
+digits      sigmoid         5050      0.950537      0.000010
+digits      sigmoid         7525      0.967952      0.000013
+digits      sigmoid        10000      0.975868      0.000011
+digits      relu             100      0.636601      0.000130
+digits      relu            2575      0.955184      0.000051
+digits      relu            5050      0.978465      0.000025
+digits      relu            7525      0.986433      0.000016
+digits      relu           10000      0.990654      0.000007
+digits      tanh             100      0.598503      0.000178
+digits      tanh            2575      0.933728      0.000033
+digits      tanh            5050      0.974320      0.000016
+digits      tanh            7525      0.988234      0.000017
+digits      tanh           10000      0.992466      0.000009
+----------------------------------------------------------------------------------------------------
+Comparison with binary experiment 5(b):
+iris: AROC did not rise at every iteration step for every activation. Best activation at 10000 iterations: linear (mean AROC 0.999333)
+iris linear @ 100: 0.930000
+iris linear @ 2575: 0.999333
+iris linear @ 5050: 0.999333
+iris linear @ 7525: 0.999333
+iris linear @ 10000: 0.999333
+iris sigmoid @ 100: 0.541667
+iris sigmoid @ 2575: 0.978667
+iris sigmoid @ 5050: 0.989667
+iris sigmoid @ 7525: 0.992667
+iris sigmoid @ 10000: 0.993333
+iris relu @ 100: 0.856333
+iris relu @ 2575: 0.997667
+iris relu @ 5050: 0.998667
+iris relu @ 7525: 0.999333
+iris relu @ 10000: 0.999333
+iris tanh @ 100: 0.676333
+iris tanh @ 2575: 0.998333
+iris tanh @ 5050: 0.999333
+iris tanh @ 7525: 0.999333
+iris tanh @ 10000: 0.999333
+digits: AROC rose at every iteration step for every activation. Best activation at 10000 iterations: linear (mean AROC 0.996114)
+digits linear @ 100: 0.741950
+digits linear @ 2575: 0.976762
+digits linear @ 5050: 0.989373
+digits linear @ 7525: 0.994385
+digits linear @ 10000: 0.996114
+digits sigmoid @ 100: 0.580645
+digits sigmoid @ 2575: 0.888944
+digits sigmoid @ 5050: 0.950537
+digits sigmoid @ 7525: 0.967952
+digits sigmoid @ 10000: 0.975868
+digits relu @ 100: 0.636601
+digits relu @ 2575: 0.955184
+digits relu @ 5050: 0.978465
+digits relu @ 7525: 0.986433
+digits relu @ 10000: 0.990654
+digits tanh @ 100: 0.598503
+digits tanh @ 2575: 0.933728
+digits tanh @ 5050: 0.974320
+digits tanh @ 7525: 0.988234
+digits tanh @ 10000: 0.992466
+The iteration trend differs from the binary experiments. Binary AROC rose on every dataset: True. Multiclass AROC rose on every dataset: False.
+Best binary activations at 10000 iterations: volcanoes relu, spam relu.
+Best multiclass activations at 10000 iterations: iris linear, digits linear.
+Error bars on experiment_7a.png are standard deviations
+Saved output/experiment_7/experiment_7a.csv
+Saved output/experiment_7/experiment_7a.png
+Saved output/experiment_7/experiment_7a.txt

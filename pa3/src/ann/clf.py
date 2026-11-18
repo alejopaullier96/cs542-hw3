@@ -201,7 +201,12 @@ class ANNC(Model):
 
         # need to map 'X_user_samples' into samples the network expects
         X_network_samples: np.ndarray = self._map_user_samples(X_user_samples)
-        Y_gt: np.ndarray = y_gt.reshape(-1,1) # make this a column vector
+        # binary labels arrive as a 1-D vector of class ids, multiclass labels already one-hot, built outside the model, with one column per class
+        y_gt = np.asarray(y_gt)
+        if y_gt.ndim == 1:
+            Y_gt: np.ndarray = y_gt.reshape(-1, 1)
+        else:
+            Y_gt: np.ndarray = y_gt
 
         # perform gradient descent until convergence
         prev_obj = np.inf # very large objective as initial value
